@@ -1,127 +1,119 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import star from "../icons/star.svg";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import LogoutIcon from "@mui/icons-material/Logout";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  //   border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import Map from ".././sub-components/Map";
+import back from "../icons/back.svg";
+import disabled from "../icons/disabled.svg";
+import motorcycle from "../icons/motorcycle.svg";
+import directions from "../icons/directions.svg";
+import booknow from "../icons/book-snow.svg";
 
 export const IndividualSpot = () => {
-  const newSpot = {
-    id: 1,
-    name: "Coffee Day Parking",
-    landmark: "Near Forum mall",
-    price: "20",
-    rating: "4.5",
-  };
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  return (
-    <>
-      <div className="border border-0 p-2">
-        <div className="d-flex mt-2 justify-content-between">
-          <div className="d-flex">
-            <MenuIcon />
-            <p className="ms-3">Welcome, Sabareesh</p>
-          </div>
-          <Link to="/">
-            <LogoutIcon />
-          </Link>
-        </div>
-        <p>Details of the Selected Location</p>
-        <img
+	function myNavFunc(lat, log) {
+		// If it's an iPhone..
+		if (
+			navigator.platform.indexOf("iPhone") != -1 ||
+			navigator.platform.indexOf("iPod") != -1 ||
+			navigator.platform.indexOf("iPad") != -1
+		)
+			window.open(
+				`maps://www.google.com/maps/dir/?api=1&travelmode=driving&layer=traffic&destination=${lat},${log}`
+			);
+		else
+			window.open(
+				`https://www.google.com/maps/dir/?api=1&travelmode=driving&layer=traffic&destination=${lat},${log}`
+			);
+	}
+	const newSpot = {
+		id: 1,
+		name: "Coffee Day Parking",
+		landmark: "Near Forum mall",
+		price: "20",
+		rating: "4.5",
+	};
+
+	return (
+		<>
+			<div className="border border-2 p-2 textAlignLeft">
+				<div>
+					{/* <p>Home</p>
+					<p>Logout</p> */}
+					<img width="30" alt="" src={back} />
+				</div>
+				<p>Details of the Selected Location</p>
+
+				{/* <img
           className="img-fluid"
           src="https://miro.medium.com/max/2000/1*eIRxvhYoWZ1dIDZD8dS1fA.png"
           alt=""
-        />
-        <div className="d-flex justify-content-center text-start mt-3">
-          <table>
-            <tbody>
-              <tr>
-                <td>Name</td>
-                <td>{newSpot.name}</td>
-              </tr>
-              <tr>
-                <td>Landmark</td>
-                <td>{newSpot.landmark}</td>
-              </tr>
-              <tr>
-                <td>Car Slots Available</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Bike Slots Available</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>Parking Cost</td>
-                <td>{newSpot.price}</td>
-              </tr>
-              <tr>
-                <td>Rating</td>
-                <td>
-                  <span>
-                    {newSpot.rating}
-                    <img src={star} alt="rating" />
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="d-flex justify-content-evenly mt-5">
-          <button
-            // onClick={() => {
-            //   alert(
-            //     "Parking slot has been booked. Please pay the initial fare now."
-            //   );
-            // }}
-            onClick={handleOpen}
-            className="btn btn-outline-dark"
-          >
-            Book Now
-          </button>
+        /> */}
+				<div className="flex jsc-sa">
+					<div>
+						<div style={{ fontSize: 22 }}>
+							<b>{newSpot.name}</b>
+						</div>
+						<div>Landmark:{newSpot.landmark}</div>
+						<div>
+							<span className="fa fa-star checked"></span>
+							<span className="fa fa-star checked"></span>
+							<span className="fa fa-star checked"></span>
+							<span className="fa fa-star"></span>
+							<span className="fa fa-star"></span>
+						</div>
+					</div>
+					<div className="svgfeatures">
+						<img sty height="50" alt="" src={motorcycle} />
+						<img height="40" alt="" src={disabled} />
+					</div>
+				</div>
 
-          <button className="btn btn-outline-dark">Navigate to Spot</button>
-        </div>
-      </div>
-      {/* Success Modal  */}
-      <div>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Booking Success!
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Woohoo! You've successfully booked yourself a parking spot. Enjoy
-              your shopping now! :)
-            </Typography>
-            <button className="btn btn-outline-dark mt-3">
-              Navigate to Spot
-            </button>
-          </Box>
-        </Modal>
-      </div>
-    </>
-  );
+				<p>Total Car Slots Available:10</p>
+				<p>Total Bike Slots Available:15</p>
+				<p>Price:₹{newSpot.price}/hour</p>
+				{/* <p>
+					Rating:{newSpot.rating} <img src={star} alt="rating" />
+				</p> */}
+				<div className="flex" style={{ height: "70px" }}>
+					<div
+						style={{ cursor: "pointer" }}
+						onClick={() => myNavFunc(28.838099, 78.760773)}
+					>
+						<img
+							style={{ display: "block", margin: "0 auto" }}
+							height="45"
+							alt="icon"
+							src={directions}
+						/>
+						<div style={{ color: "#1A72E9" }}>DIRECTIONS</div>
+					</div>
+					<div style={{ cursor: "pointer", marginLeft: "10px" }}>
+						<img
+							style={{ display: "block", margin: "0 auto" }}
+							height="45"
+							alt="icon"
+							src={booknow}
+						/>
+						<div
+							style={{
+								color: "#1A72E9",
+								fontSize: "14px",
+								fontWeight: 500,
+							}}
+						>
+							BOOK NOW
+						</div>
+					</div>
+				</div>
+				<div
+					style={{
+						maxWidth: "350px",
+						maxHeight: "400px",
+					}}
+				>
+					<Map />
+				</div>
+				{/* <div id="map"></div> */}
+				{/* <button className="btn btn-outline-secondary">Book Now</button> */}
+			</div>
+		</>
+	);
 };
