@@ -8,9 +8,10 @@ const clientId =
 export function GLogin() {
   const onSuccess = (res) => {
     console.log("Login Success: currentUser:", res.profileObj);
-    alert(
-      `Logged in successfully welcome ${res.profileObj.name} 😍. \n See console for full profile object.`
-    );
+    // alert(
+    //   `Logged in successfully welcome ${res.profileObj.name} 😍. \n See console for full profile object.`
+    // );
+    localStorage.setItem("GoogleDetails", JSON.stringify(res.profileObj));
   };
 
   const onFailure = (res) => {

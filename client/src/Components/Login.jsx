@@ -2,6 +2,7 @@ import google from "../icons/google.svg";
 import facebook from "../icons/facebook.svg";
 import twitter from "../icons/twitter.svg";
 import { Link } from "react-router-dom";
+import { GLogin } from "./GoogleLogin";
 
 export const Login = ({ setLogin }) => {
   return (
@@ -28,7 +29,8 @@ export const Login = ({ setLogin }) => {
         </Link>
       </div>
       <div className="d-flex justify-content-evenly mt-5">
-        <img className="col-1" src={google} alt="Google" />
+        {/* <img className="col-1" src={google} alt="Google" /> */}
+        <GLogin />
         <img className="col-1" src={facebook} alt="Facebook" />
         <img className="col-1" src={twitter} alt="Twitter" />
       </div>

@@ -47,7 +47,7 @@ export const LandingPage = ({ setLogin }) => {
       <div>
         <input
           type="text"
-          value={`Your Current Location : ${location}`}
+          value={location}
           onChange={(e) => {
             setLocation(e.target.value);
           }}

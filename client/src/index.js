@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { LocationContextProvider } from "./Contexts/LocationProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <LocationContextProvider>
+        <App />
+      </LocationContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
