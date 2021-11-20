@@ -1,4 +1,5 @@
 let express = require("express");
+let cors = require("cors");
 
 let { connect } = require("./config/db.config");
 let { router: parkingController } = require("./controllers/parking.controller");
@@ -6,6 +7,7 @@ let { router: adminController } = require("./controllers/admin.controller");
 
 let app = express();
 app.use(express.json());
+app.use(cors());
 
 app.use("/admin", adminController);
 app.use("/parking", parkingController);
