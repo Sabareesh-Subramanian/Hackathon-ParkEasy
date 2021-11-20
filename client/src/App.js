@@ -5,6 +5,8 @@ import { LandingPage } from "./Components/LandingPage";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { IndividualSpot } from "./Components/IndividualSpot";
+import { Splashscreen } from "./Components/SplashScreen";
+import { Admin } from "./Components/Admin";
 
 function App() {
   localStorage.setItem("hacklogin", "false");
@@ -12,22 +14,15 @@ function App() {
   useEffect(() => {
     setLogin(localStorage.getItem("hacklogin"));
   }, []);
-  console.log("isLoggedIn:", login);
+
   return (
     <div className="App">
       <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            login === "true" ? (
-              <LandingPage setLogin={setLogin} />
-            ) : (
-              <Login setLogin={setLogin} />
-            )
-          }
-        ></Route>
+        <Route exact path="/" element={<Splashscreen />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/home" element={<LandingPage />}></Route>
         <Route exact path="/spots" element={<Spots />}></Route>
+        <Route path="/admin" element={<Admin />}></Route>
         <Route
           exact
           path="/spots/:id"
