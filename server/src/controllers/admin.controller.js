@@ -4,6 +4,22 @@ const router = express.Router();
 const { Parking } = require("../models/parking.model");
 const { errorTemplate } = require("../utilities/errorTemplate");
 
+router.get("/parking_data/:id", async (req, res) => {
+  let { id } = req.params;
+  try {
+    let parking_data = await Parking.findById(id).lean().exec();
+
+    return res.status(200).json({
+      error: false,
+      data: {
+        parking_data,
+      },
+    });
+  } catch (error) {
+    return errorTemplate(res, 400, error.message);
+  }
+});
+
 router.post("/create", async (req, res) => {
   let { body } = req;
 

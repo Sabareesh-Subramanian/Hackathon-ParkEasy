@@ -5,6 +5,7 @@ import { LandingPage } from "./Components/LandingPage";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { IndividualSpot } from "./Components/IndividualSpot";
+import { AdminSocketTest } from "./Components/AdminSocketTest";
 
 function App() {
   localStorage.setItem("hacklogin", "false");
@@ -14,11 +15,12 @@ function App() {
   }, []);
   console.log("isLoggedIn:", login);
   return (
-    <div className="App">
+    <div className='App'>
+      <AdminSocketTest />
       <Routes>
         <Route
           exact
-          path="/"
+          path='/'
           element={
             login === "true" ? (
               <LandingPage setLogin={setLogin} />
@@ -27,10 +29,10 @@ function App() {
             )
           }
         ></Route>
-        <Route exact path="/spots" element={<Spots />}></Route>
+        <Route exact path='/spots' element={<Spots />}></Route>
         <Route
           exact
-          path="/spots/:id"
+          path='/spots/:id'
           element={<IndividualSpot setLogin={setLogin} />}
         ></Route>
       </Routes>

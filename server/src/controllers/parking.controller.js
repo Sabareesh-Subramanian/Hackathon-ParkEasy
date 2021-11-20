@@ -64,13 +64,22 @@ router.post("/book", async (req, res) => {
 
     let booking = await Booking.create(body);
 
-    let update =
+    let to_update =
       slot == "car"
         ? { car_slots_available: availability - 1 }
         : slot == "bike"
         ? { bike_slots_available: availability - 1 }
         : { disabled_slot_available: availability - 1 };
-    await Parking.findOneAndUpdate({ _id: parking_id }, update).lean().exec();
+    let updated = await Parking.findOneAndUpdate(
+      { _id: parking_id },
+      to_update,
+      { new: true }
+    )
+      .lean()
+      .exec();
+
+    let socket = req.app.get("socket");
+    socket.emit(parking_id, updated);
 
     return res.status(200).json({
       error: false,
