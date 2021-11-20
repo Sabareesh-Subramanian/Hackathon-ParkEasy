@@ -11,7 +11,7 @@ export const Splashscreen = () => {
         />
         <p className="mt-5 text-dark display-1">Park Easy</p>
         <div className="d-flex justify-content-evenly">
-          <Link to="/admin">
+          <Link to="/admin/1">
             <button className="btn btn-dark mt-5 mb-5">Admin</button>
           </Link>
           <Link to="/login">

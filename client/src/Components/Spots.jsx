@@ -1,26 +1,42 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import star from "../icons/star.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import axios from "axios";
 
 export const Spots = () => {
-  const newSpot = {
-    id: 1,
-    name: "Coffee Day Parking",
-    landmark: "Near Forum mall",
-    price: "20",
-    rating: "4.5",
-  };
   const [spots, setSpots] = useState([]);
+
+  // const [lat, long] = location.trim().split(",");
   useEffect(() => {
-    setSpots([...spots, newSpot]);
+    getSpots();
   }, []);
-  return (
+  const getSpots = async () => {
+    let res = await axios.post("http://localhost:8000/parking/find_places", {
+      lat: 13.0453221,
+      long: 80.2389704,
+    });
+    console.log("res:", res.data.data.parkings);
+    setSpots(res.data.data.parkings);
+  };
+
+  const getDisabledSpots = async () => {
+    let res = await axios.post("http://localhost:8000/parking/find_places", {
+      lat: 13.0453221,
+      long: 80.2389704,
+      disabled_slot: true,
+    });
+    // console.log("res:", res.data.data.parkings);
+    setSpots(res.data.data.parkings);
+  };
+  return spots.length === 0 ? (
+    "Loading"
+  ) : (
     <>
       <div className="d-flex mt-2 justify-content-between">
         <div className="d-flex">
@@ -32,7 +48,8 @@ export const Spots = () => {
         </Link>
       </div>
       <p className="text-start">
-        You're lucky! We've found 10 parking spots close to your destination.
+        You're lucky! We've found {spots.length} parking spots close to your
+        destination.
       </p>
       <div
         className="d-flex justify-content-between"
@@ -43,9 +60,10 @@ export const Spots = () => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            //   value={age}
+            onChange={(e) => {
+              console.log("Select", e.target);
+            }}
             label="Age"
-            //   onChange={handleChange}
           >
             <MenuItem value="RatingHightoLow">Rating : High to Low</MenuItem>
             <MenuItem value="RatingLowtoHigh">Rating : Low to High</MenuItem>
@@ -57,6 +75,14 @@ export const Spots = () => {
             Parking for Disabled?
           </label>
           <input
+            onChange={(e) => {
+              // console.log("Test", e.target.checked);
+              if (e.target.checked) {
+                getDisabledSpots();
+              } else {
+                getSpots();
+              }
+            }}
             class="form-check-input"
             type="checkbox"
             value=""
@@ -65,23 +91,27 @@ export const Spots = () => {
         </div>
       </div>
       <div>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => {
+        {spots.map((newSpot) => {
           return (
-            <div className="border border-2 m-2 shadow p-2">
+            <div key={newSpot.id} className="border border-2 m-2 shadow p-2">
               <div className="d-flex justify-content-between ">
                 <div className="text-start">
-                  <p>Name:{newSpot.name}</p>
-                  <p>Landmark:{newSpot.landmark}</p>
+                  <p>Name : {newSpot.name}</p>
+                  <p>
+                    Disabled Friendly Parking :{" "}
+                    {newSpot.disabled_slot ? "Yes" : "No"}
+                  </p>
+                  <p></p>
                 </div>
                 <div className="text-end">
-                  <p>Price:₹{newSpot.price}/hour</p>
+                  <p>Price:₹{newSpot.price_slabs.car_slab[0]}/hour</p>
                   <p>
-                    Rating:{newSpot.rating} <img src={star} alt="rating" />
+                    Rating:{newSpot.user_rating} <img src={star} alt="rating" />
                   </p>
                 </div>
               </div>
               <div className="text-end">
-                <Link to={`/spots/${newSpot.id}`}>
+                <Link to={`/spots/${newSpot._id}`}>
                   <p>More</p>
                 </Link>
               </div>
