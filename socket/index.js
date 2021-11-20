@@ -4,7 +4,7 @@ const io = require("socket.io")(8900, {
 	},
 });
 
-let users = [{ userId: 123 }];
+let users = [];
 
 const addUser = (userId, socketId) => {
 	!users.some((user) => user.userId === userId) &&
@@ -16,6 +16,7 @@ const removeUser = (socketId) => {
 };
 
 const getUser = (userId) => {
+	console.log("userId:", userId);
 	return users.find((user) => user.userId === userId);
 };
 
@@ -32,11 +33,14 @@ io.on("connection", (socket) => {
 	//send and get message
 	socket.on("bookslot", ({ bookerId, parkingId, type }) => {
 		const user = getUser(parkingId);
-		// io.to(user.socketId).emit("slotbooked", {
-		// 	bookerId,
-		// 	type,
-		// });
-		io.emit("successBooked", "success");
+		console.log("user:", user);
+		if (user) {
+			io.to(user.socketId).emit("slotbooked", {
+				bookerId,
+				type,
+			});
+		}
+		// io.emit("successBooked", "success");
 	});
 
 	// when disconnect

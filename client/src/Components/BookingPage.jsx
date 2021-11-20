@@ -13,26 +13,29 @@ export const BookingPage = () => {
 	}, []);
 
 	const handleSubmit = (e) => {
-		const parkingId = "6198825165cf28bb8d471ddb";
+		const parking_id = "6198825165cf28bb8d471ddb";
 		const type = "car";
 		const bookerId = "1234";
+		const mobile = 1234;
 
 		try {
-			// axios
-			// 	.post("/book", {
-			// 		parkingId: "6198825165cf28bb8d471ddb",
-			// 		type: "bike",
-			// 	})
-			// 	.then(() => alert("booked slot"))
-			// .then(
-			socket.current.emit("bookslot", {
-				bookerId,
-				parkingId,
-				type,
-			});
-			// );
+			axios
+				.post("http://localhost:8000/parking/book", {
+					parking_id: "6198825165cf28bb8d471ddb",
+					slot: "car",
+					mobile,
+					user: "abc",
+				})
+				.then(() => alert("booked slot"))
+				.then(() => {
+					socket.current.emit("bookslot", {
+						bookerId,
+						parkingId: parking_id,
+						type,
+					});
+				});
 		} catch (err) {
-			console.error(err);
+			console.error(err.message);
 		}
 	};
 

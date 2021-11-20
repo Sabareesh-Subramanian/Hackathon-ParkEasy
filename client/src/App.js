@@ -6,6 +6,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { IndividualSpot } from "./Components/IndividualSpot";
 import { BookingPage } from "./Components/BookingPage";
+import { Admin } from "./Components/Admin";
 
 function App() {
 	localStorage.setItem("hacklogin", "false");
@@ -39,6 +40,7 @@ function App() {
 					path="/spots/:id/book"
 					element={<BookingPage setLogin={setLogin} />}
 				></Route>
+				<Route exact path="/admin/:id/" element={<Admin />}></Route>
 			</Routes>
 		</div>
 	);
