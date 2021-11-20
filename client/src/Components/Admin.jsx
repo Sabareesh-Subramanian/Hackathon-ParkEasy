@@ -32,18 +32,15 @@ export const Admin = () => {
     console.log("res:", res.data.data.parking_data);
     setSelectedSpot(res.data.data.parking_data);
   };
-  const socket = useRef();
 
-  const { id } = useParams();
-
+  let server_url = "http://localhost:8000/";
+  let socket = io(server_url);
+  console.log(selectedSpot._id);
+  socket.on(selectedSpot._id, (updated) => {
+    console.log(updated);
+    setSelectedSpot({ ...updated });
+  });
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-    socket.current.emit("addUser", id);
-    socket.current.on("slotbooked", (data) => {
-      getDetails();
-      console.log(data);
-      // setSelectedSpot(data);
-    });
     getDetails();
   }, []);
   return (

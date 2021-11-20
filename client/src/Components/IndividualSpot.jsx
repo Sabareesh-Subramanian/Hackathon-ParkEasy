@@ -17,7 +17,7 @@ export const IndividualSpot = () => {
       parking_id: selectedSpot._id,
       slot: "car", // to be changed once we add radio buttons
       mobile: 8098806664,
-      user: details.name, // to be changed once we get Google details
+      user: details.name || "Sabareesh", // to be changed once we get Google details
     });
     console.log("res:", res);
   };
