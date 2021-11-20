@@ -37,7 +37,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.patch("/slot_update", async (req, res) => {
+router.post("/slot_update", async (req, res) => {
   let { id, ...to_upadate } = req.body;
 
   try {
