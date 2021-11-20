@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const { Parking } = require("../models/parking.model");
+const { Booking } = require("../models/booking.model");
 const { errorTemplate } = require("../utilities/errorTemplate");
 
 router.post("/find_places", async (req, res) => {
@@ -65,10 +66,10 @@ router.post("/book", async (req, res) => {
 
     let update =
       slot == "car"
-        ? { car_slots_available: availability.car_slots_available - 1 }
+        ? { car_slots_available: availability - 1 }
         : slot == "bike"
-        ? { bike_slots_available: availability.bike_slots_available - 1 }
-        : { disabled_slot_available: availability.disabled_slot_available - 1 };
+        ? { bike_slots_available: availability - 1 }
+        : { disabled_slot_available: availability - 1 };
     await Parking.findOneAndUpdate({ _id: parking_id }, update).lean().exec();
 
     return res.status(200).json({
