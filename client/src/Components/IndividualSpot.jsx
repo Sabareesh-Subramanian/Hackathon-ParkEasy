@@ -1,3 +1,4 @@
+import MenuIcon from "@mui/icons-material/Menu";
 import star from "../icons/star.svg";
 import Map from ".././sub-components/Map";
 import back from "../icons/back.svg";
