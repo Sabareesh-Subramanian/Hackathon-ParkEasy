@@ -6,6 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import Inputbox from "./Inputbox";
+import { listItemIconClasses } from "@mui/material";
 
 // import PlacesAutocomplete, {
 // 	geocodeByAddress,
@@ -13,6 +14,7 @@ import Inputbox from "./Inputbox";
 // } from "react-places-autocomplete";
 
 export const LandingPage = ({ setLogin }) => {
+  const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const [location, setLocation] = useState([]);
   // const [address, setAddress] = useState("");
   // const [coordinates, setCoordinates] = useState({
@@ -28,8 +30,12 @@ export const LandingPage = ({ setLogin }) => {
   }
 
   function showPosition(position) {
-    console.log("position:", position);
-    setLocation(() => [position.coords.latitude, position.coords.longitude]);
+    let { latitude, longitude } = position.coords;
+    setLocation(() => [latitude, longitude]);
+    localStorage.setItem(
+      "startpoints",
+      JSON.stringify({ lat: latitude, long: longitude })
+    );
   }
   // const handleSelect = async (value) => {
   // 	const results = await geocodeByAddress(value);
@@ -49,12 +55,12 @@ export const LandingPage = ({ setLogin }) => {
 
   return (
     <>
-      <div className="d-flex m-2 justify-content-between">
-        <div className="d-flex">
+      <div className='d-flex m-2 justify-content-between'>
+        <div className='d-flex'>
           <MenuIcon />
-          <p className="ms-3">Welcome, Sabareesh</p>
+          <p className='ms-3'>Welcome, {details.givenName}</p>
         </div>
-        <Link to="/">
+        <Link to='/'>
           <LogoutIcon />
         </Link>
       </div>
@@ -104,23 +110,23 @@ export const LandingPage = ({ setLogin }) => {
       <div style={{ height: "200px", width: "360px" }}>
         {/* <MapContainer location={location} /> */}
       </div>
-      <p className="lead mt-5">
+      <p className='lead mt-5'>
         Type your destination point and find out all parking spots available for
         booking at the moment
       </p>
       <div>
         <input
-          type="text"
+          type='text'
           value={location}
           onChange={(e) => {
             setLocation(e.target.value);
           }}
-          className="form-control mt-5 text-center"
-          placeholder="Enter your destination"
+          className='form-control mt-5 text-center'
+          placeholder='Enter your destination'
         />
       </div>
-      <Link to="/spots">
-        <button className="btn btn-outline-secondary mt-5 mb-5">
+      <Link to='/spots'>
+        <button className='btn btn-outline-secondary mt-5 mb-5'>
           Search Now
         </button>
       </Link>
