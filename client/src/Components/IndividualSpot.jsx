@@ -9,17 +9,50 @@ import booknow from "../icons/book-snow.svg";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import { BookingPage } from "./BookingPage";
+import { Link } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  //   border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export const IndividualSpot = () => {
+  const [open, setOpen] = useState(false);
+  const [payment, setPayment] = useState(false);
+  const [error, setError] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const handleBooking = async () => {
-    let res = await axios.post(" http://localhost:8000/parking/book", {
-      parking_id: selectedSpot._id,
-      slot: "car", // to be changed once we add radio buttons
-      mobile: 8098806664,
-      user: details.name || "Sabareesh", // to be changed once we get Google details
-    });
-    console.log("res:", res);
+
+    try {
+      let res = await axios.post(" http://localhost:8000/parking/book", {
+        parking_id: selectedSpot._id,
+        slot: "car", // to be changed once we add radio buttons
+        mobile: 8098806664,
+        user: details.name, // to be changed once we get Google details
+      });
+      console.log("res:", res);
+    } catch (error) {
+      console.log("error:", error);
+      if (error) {
+        setError(true);
+      }
+    }
+
   };
   const [selectedSpot, setSelectedSpot] = useState({});
   const { id } = useParams();
@@ -62,11 +95,20 @@ export const IndividualSpot = () => {
     "Loading ..."
   ) : (
     <>
-      <div className="border border-2 p-2 textAlignLeft">
-        <div>
-          {/* <p>Home</p>
-					<p>Logout</p> */}
+      <div className="border border-0 p-2 textAlignLeft">
+        {/* <div>
+           <p>Home</p>
+					<p>Logout</p> 
           <img width="30" alt="" src={back} />
+        </div> */}
+        <div className="d-flex mt-2 justify-content-between">
+          <div className="d-flex">
+            <MenuIcon />
+            <p className="ms-3">Welcome, {details.givenName}</p>
+          </div>
+          <Link to="/">
+            <LogoutIcon />
+          </Link>
         </div>
         <p>Details of the Selected Location</p>
 
@@ -91,7 +133,9 @@ export const IndividualSpot = () => {
           </div>
           <div className="svgfeatures">
             <img sty height="50" alt="" src={motorcycle} />
-            <img height="40" alt="" src={disabled} />
+            {selectedSpot.disabled_slot ? (
+              <img height="40" alt="" src={disabled} />
+            ) : null}
           </div>
         </div>
 
@@ -108,7 +152,7 @@ export const IndividualSpot = () => {
         {/* <p>
 					Rating:{newSpot.rating} <img src={star} alt="rating" />
 				</p> */}
-        <div className="flex" style={{ height: "70px" }}>
+        {/* <div className="flex" style={{ height: "70px" }}>
           <div
             style={{ cursor: "pointer" }}
             onClick={() =>
@@ -146,17 +190,76 @@ export const IndividualSpot = () => {
               BOOK NOW
             </div>
           </div>
+        </div> */}
+        <div className="d-flex justify-content-center my-3">
+          <button onClick={handleOpen} className="btn btn-outline-dark">
+            Book Now
+          </button>
         </div>
         <div
           style={{
             maxWidth: "350px",
-            maxHeight: "400px",
+            maxHeight: "200px",
           }}
         >
           <Map />
         </div>
         {/* <div id="map"></div> */}
-        {/* <button className="btn btn-outline-secondary">Book Now</button> */}
+      </div>
+      {/* Success Modal  */}
+      <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {error
+                ? "Uh Oh! There's a failure!"
+                : payment
+                ? "Booking Success!"
+                : "Confirm Payment"}
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              {error
+                ? "Looks like others have over passed you. Please try a different parking spot."
+                : payment
+                ? "Woohoo! You've successfully booked yourself a parking spot. Enjoy your shopping now! :)"
+                : "Please pay the price for the first one hour and book yourself a parking spot."}
+            </Typography>
+            {error ? (
+              <Link to="/spots">
+                <button className="btn btn-outline-dark mt-3">
+                  Search for a different spot
+                </button>{" "}
+              </Link>
+            ) : payment ? (
+              <button
+                onClick={() =>
+                  myNavFunc(
+                    selectedSpot.loc.coordinates[0],
+                    selectedSpot.loc.coordinates[1]
+                  )
+                }
+                className="btn btn-outline-dark mt-3"
+              >
+                Navigate to Spot
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setPayment(true);
+                  handleBooking();
+                }}
+                className="btn btn-outline-dark mt-3"
+              >
+                Pay Now
+              </button>
+            )}
+          </Box>
+        </Modal>
       </div>
     </>
   );
