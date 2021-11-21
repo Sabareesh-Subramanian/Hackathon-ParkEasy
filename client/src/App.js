@@ -8,8 +8,8 @@ import { IndividualSpot } from "./Components/IndividualSpot";
 import { Splashscreen } from "./Components/SplashScreen";
 import { Admin } from "./Components/Admin";
 import { BookingPage } from "./Components/BookingPage";
-import { SpotNew } from "./Components/SpotSab";
 
+localStorage.setItem("hacklogin", "false");
 function App() {
 	localStorage.setItem("hacklogin", "false");
 	const [login, setLogin] = useState();
@@ -39,6 +39,7 @@ function App() {
 			</Routes>
 		</div>
 	);
+
 }
 
 export default App;
