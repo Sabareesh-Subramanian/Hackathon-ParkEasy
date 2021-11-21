@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon"
+    "start": "node index.js",
+    "devStart": "nodemon"
   },
-  "keywords": [],
+  "keywords": [
+    "heroku"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -15,5 +18,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.11.15",
     "socket.io": "^4.4.0"
+  },
+  "engines": {
+    "node": "14.16.0"
   }
 }

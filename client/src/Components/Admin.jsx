@@ -3,59 +3,73 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import { io } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  //   border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export const Admin = () => {
-	const [selectedSpot, setSelectedSpot] = useState({});
-	// console.log("selectedSpot:", selectedSpot);
+  const [modal, setModal] = useState(false);
+  const [selectedSpot, setSelectedSpot] = useState({});
 
-	const ModifySlots = async (type, value) => {
-		const postObj = {
-			id: selectedSpot._id,
-			[type]: selectedSpot[type] + value,
-		};
-		// console.log("postObj:", postObj);
-		const res = await axios.post(
-			"http://localhost:8000/admin/slot_update",
-			postObj
-		);
-		console.log("res:", res);
-		setSelectedSpot(res.data.data.updated);
-	};
+  const handleOpenModal = () => setModal(true);
+  const handleCloseModal = () => setModal(false);
 
+  const ModifySlots = async (type, value) => {
+    const postObj = {
+      id: selectedSpot._id,
+      [type]: selectedSpot[type] + value,
+    };
+
+    const res = await axios.post(
+      "http://localhost:8000/admin/slot_update",
+      postObj
+    );
+
+    setSelectedSpot(res.data.data.updated);
+  };
 
   const getDetails = async () => {
     const res = await axios.get(
       "http://localhost:8000/admin/parking_data/6198825165cf28bb8d471de6"
     );
-    console.log("res:", res.data.data.parking_data);
+
     setSelectedSpot(res.data.data.parking_data);
   };
-
-	
 
   let server_url = "http://localhost:8000/";
   let socket = io(server_url);
   console.log(selectedSpot._id);
   socket.on(selectedSpot._id, (updated) => {
-    console.log(updated);
+    handleOpenModal();
     setSelectedSpot({ ...updated });
   });
+
   useEffect(() => {
-
-
     getDetails();
   }, []);
+
   return (
     <>
-      <div className="d-flex justify-content-between mb-5">
-        <button className="btn">
+      <div className='d-flex justify-content-between mb-5'>
+        <button className='btn'>
           <MenuIcon />
         </button>
-        <Link to="/">
-          <button className="btn">
+        <Link to='/'>
+          <button className='btn'>
             <LogoutIcon />
           </button>
         </Link>
@@ -63,10 +77,14 @@ export const Admin = () => {
       <table>
         <tbody>
           <tr>
+            <td>Parking Spot Name:</td>
+            <td>{selectedSpot.name}</td>
+          </tr>
+          <tr>
             <td>Car spots available :</td>
             <td>
               <div
-                className="mx-3"
+                className='mx-3'
                 style={{ cursor: "pointer" }}
                 disabled={selectedSpot.car_slots_available === 0}
                 onClick={() => {
@@ -81,7 +99,7 @@ export const Admin = () => {
             </td>
             <td>
               <div
-                className="mx-3"
+                className='mx-3'
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   ModifySlots("car_slots_available", 1);
@@ -95,7 +113,7 @@ export const Admin = () => {
             <td>Bike spots available :</td>
             <td>
               <div
-                className="mx-3"
+                className='mx-3'
                 style={{ cursor: "pointer" }}
                 disabled={selectedSpot.bike_slots_available === 0}
                 onClick={() => {
@@ -110,7 +128,7 @@ export const Admin = () => {
             </td>
             <td>
               <div
-                className="mx-3"
+                className='mx-3'
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   ModifySlots("bike_slots_available", 1);
@@ -125,7 +143,7 @@ export const Admin = () => {
               <td>Disabled Parking spots available :</td>
               <td>
                 <div
-                  className="mx-3"
+                  className='mx-3'
                   style={{ cursor: "pointer" }}
                   disabled={selectedSpot.disabled_slot_available === 0}
                   onClick={() => {
@@ -140,7 +158,7 @@ export const Admin = () => {
               </td>
               <td>
                 <div
-                  className="mx-3"
+                  className='mx-3'
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     ModifySlots("disabled_slot_available", 1);
@@ -153,63 +171,26 @@ export const Admin = () => {
           ) : null}
         </tbody>
       </table>
-      {/* <Navbar /> */}
-
-      {/* <div className="d-flex">
-        <p>Bike spots available :</p>
-        <div
-          className="mx-3"
-          style={{ cursor: "pointer" }}
-          disabled={selectedSpot.bike_slots_available === 0}
-          onClick={() => {
-            ModifySlots("bike_slots_available", -1);
-          }}
+      <div>
+        <Modal
+          open={modal}
+          onClose={handleCloseModal}
+          aria-labelledby='modal-modal-title'
+          aria-describedby='modal-modal-description'
         >
-          -
-        </div>
-
-        <b>{selectedSpot.bike_slots_available}</b>
-        <div
-          className="mx-3"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            ModifySlots("bike_slots_available", 1);
-          }}
-        >
-          +
-        </div>
-      </div> */}
-      {/* {selectedSpot.disabled_slot ? (
-        <div className="d-flex justify-content-center">
-          <p>Disabled Parking spots available :</p>
-          <div
-            className="mx-3"
-            style={{ cursor: "pointer" }}
-            disabled={selectedSpot.disabled_slot_available === 0}
-            onClick={() => {
-              ModifySlots("disabled_slot_available", -1);
-            }}
-          >
-            -
-          </div>
-
-          <b>{selectedSpot.disabled_slot_available || 0}</b>
-          <div
-            className="mx-3"
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              ModifySlots("disabled_slot_available", 1);
-            }}
-          >
-            +
-          </div>
-        </div>
-      ) : null} */}
-
-      {/* <button className="btn btn-outline-dark mt-5">Add a free spot</button>
-      <button className="btn btn-outline-dark mt-5">
-        Remove a booked spot
-      </button> */}
+          <Box sx={style}>
+            <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+              A booking was made
+            </Typography>
+            <button
+              className='btn btn-outline-dark mt-3'
+              onClick={handleCloseModal}
+            >
+              Ok
+            </button>{" "}
+          </Box>
+        </Modal>
+      </div>
     </>
   );
 };
