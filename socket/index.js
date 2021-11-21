@@ -5,10 +5,20 @@ const io = require("socket.io")(8900, {
 });
 
 let users = [];
+let livelocation = [];
 
 const addUser = (userId, socketId) => {
 	!users.some((user) => user.userId === userId) &&
 		users.push({ userId, socketId });
+	console.log("users:", users);
+};
+const updateUser = (userId, lat, log) => {
+	livelocation.push([, userId, lat, log]);
+};
+
+const getUserLocation = (userId) => {
+	const userLoc = livelocation.filter((user) => user[0] === userId);
+	return { lat: userLoc[0], long: userLoc[1] };
 };
 
 const removeUser = (socketId) => {
@@ -28,6 +38,20 @@ io.on("connection", (socket) => {
 	socket.on("addUser", (userId) => {
 		addUser(userId, socket.id);
 		io.emit("getUsers", users);
+	});
+
+	// location on socket
+	socket.on("updateLocation", ({ userId, lat, log }) => {
+		updateUser(userId, lat, log);
+		io.emit("", users);
+	});
+	socket.on("returnLocation", (userId) => {
+		const [lat, log] = getUserLocation(userId);
+		const user = getUser(userId);
+		console.log("user:", user);
+		if (user) {
+			io.to(user.socketId).emit("location", { lat, log });
+		}
 	});
 
 	//send and get message
