@@ -22,9 +22,9 @@ const style = {
 };
 
 export const Admin = () => {
-
   const [modal, setModal] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState({});
+  const [newNumber, setVehicleNumber] = useState(null);
 
   const handleOpenModal = () => setModal(true);
   const handleCloseModal = () => setModal(false);
@@ -40,7 +40,6 @@ export const Admin = () => {
       postObj
     );
 
-
     setSelectedSpot(res.data.data.updated);
   };
 
@@ -55,9 +54,11 @@ export const Admin = () => {
   let server_url = "http://localhost:8000/";
   let socket = io(server_url);
   console.log(selectedSpot._id);
-  socket.on(selectedSpot._id, (updated) => {
+  socket.on(selectedSpot._id, ({ vehicleNumber, updated }) => {
+    console.log("updated:", updated);
     handleOpenModal();
     setSelectedSpot({ ...updated });
+    setVehicleNumber(vehicleNumber);
   });
 
   useEffect(() => {
@@ -66,17 +67,15 @@ export const Admin = () => {
 
   return (
     <>
-
-      <div className='d-flex justify-content-between mb-5'>
+      <div className="d-flex justify-content-between mb-5">
         <div className="d-flex">
           <MenuIcon />
           <p className="ms-3">Welcome, Admin</p>
         </div>
-        <Link to='/'>
-          <button className='btn'>
+        <Link to="/">
+          <button className="btn">
             <LogoutIcon />
           </button>
-
         </Link>
       </div>
       <table>
@@ -89,7 +88,7 @@ export const Admin = () => {
             <td>Car spots available :</td>
             <td>
               <div
-                className='mx-3'
+                className="mx-3"
                 style={{ cursor: "pointer" }}
                 disabled={selectedSpot.car_slots_available === 0}
                 onClick={() => {
@@ -104,7 +103,7 @@ export const Admin = () => {
             </td>
             <td>
               <div
-                className='mx-3'
+                className="mx-3"
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   ModifySlots("car_slots_available", 1);
@@ -118,7 +117,7 @@ export const Admin = () => {
             <td>Bike spots available :</td>
             <td>
               <div
-                className='mx-3'
+                className="mx-3"
                 style={{ cursor: "pointer" }}
                 disabled={selectedSpot.bike_slots_available === 0}
                 onClick={() => {
@@ -133,7 +132,7 @@ export const Admin = () => {
             </td>
             <td>
               <div
-                className='mx-3'
+                className="mx-3"
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   ModifySlots("bike_slots_available", 1);
@@ -148,7 +147,7 @@ export const Admin = () => {
               <td>Disabled Parking spots available :</td>
               <td>
                 <div
-                  className='mx-3'
+                  className="mx-3"
                   style={{ cursor: "pointer" }}
                   disabled={selectedSpot.disabled_slot_available === 0}
                   onClick={() => {
@@ -163,7 +162,7 @@ export const Admin = () => {
               </td>
               <td>
                 <div
-                  className='mx-3'
+                  className="mx-3"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     ModifySlots("disabled_slot_available", 1);
@@ -180,15 +179,15 @@ export const Admin = () => {
         <Modal
           open={modal}
           onClose={handleCloseModal}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-              A booking was made
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              A booking was made for Vehicle {newNumber}.
             </Typography>
             <button
-              className='btn btn-outline-dark mt-3'
+              className="btn btn-outline-dark mt-3"
               onClick={handleCloseModal}
             >
               Ok

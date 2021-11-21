@@ -32,7 +32,6 @@ export const IndividualSpot = () => {
   const [payment, setPayment] = useState(false);
   const [error, setError] = useState(false);
 
-
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const [booking_details, setBookingDetails] = useState(["car", details.name]);
   const [input, setInput] = useState("");
@@ -106,11 +105,9 @@ export const IndividualSpot = () => {
     "Loading ..."
   ) : (
     <>
-
-      <div className='border border-0 p-2 textAlignLeft'>
-        <div className='d-flex mt-2 justify-content-between'>
-          <div className='d-flex'>
-
+      <div className="border border-0 p-2 textAlignLeft">
+        <div className="d-flex mt-2 justify-content-between">
+          <div className="d-flex">
             <MenuIcon />
             <p className="ms-3">Welcome, {details.givenName}</p>
           </div>
@@ -153,6 +150,17 @@ export const IndividualSpot = () => {
             : "No"}
         </p>
         <div>
+          <TextField
+            className="mt-3"
+            id="outlined-basic"
+            value={vehicleNumber}
+            label="Vehicle Number"
+            variant="standard"
+            onChange={(e) => {
+              setVehicleNumber(e.target.value);
+            }}
+          />{" "}
+          <br /> <br />
           <Button
             style={{ backgroundColor: "#00b386", color: "white" }}
             aria-controls="simple-menu"
@@ -176,7 +184,7 @@ export const IndividualSpot = () => {
             </MenuItem>
             {selectedSpot.disabled_slot ? (
               <MenuItem onClick={() => handleOpen("disabled", details.name)}>
-                Book disaabled friendly
+                Book disabled friendly
               </MenuItem>
             ) : null}
           </Menu>
@@ -207,25 +215,16 @@ export const IndividualSpot = () => {
                 onChange={(e) => e.target.value}
               />
             )} */}
-            <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               {error
                 ? "Looks like others have over passed you. Please try a different parking spot."
                 : payment
                 ? "Woohoo! You've successfully booked yourself a parking spot. Enjoy your shopping now! :)"
                 : "Please pay the price for the first one hour and book yourself a parking spot."}
             </Typography>
-            {!error && !payment ? (
-              <TextField
-                className="mt-3"
-                id="outlined-basic"
-                label="Vehicle Number"
-                variant="standard"
-                onChange={(e) => {
-                  setVehicleNumber(e.target.value);
-                }}
-              />
-            ) : null}
+            {/* {!error && !payment ? (
+              
+            ) : null} */}
             <br />
             {error ? (
               <Link to="/spots">
