@@ -16,11 +16,6 @@ import { listItemIconClasses } from "@mui/material";
 export const LandingPage = ({ setLogin }) => {
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const [location, setLocation] = useState([]);
-  // const [address, setAddress] = useState("");
-  // const [coordinates, setCoordinates] = useState({
-  // 	lat: null,
-  // 	lng: null,
-  // });
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(showPosition);
@@ -30,28 +25,20 @@ export const LandingPage = ({ setLogin }) => {
   }
 
   function showPosition(position) {
-    let { latitude, longitude } = position.coords;
-    setLocation(() => [latitude, longitude]);
+    console.log("position:", position);
+    setLocation(() => [position.coords.latitude, position.coords.longitude]);
     localStorage.setItem(
       "startpoints",
-      JSON.stringify({ lat: latitude, long: longitude })
+      JSON.stringify({
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+      })
     );
   }
-  // const handleSelect = async (value) => {
-  // 	const results = await geocodeByAddress(value);
-  // 	console.log("results:", results);
-  // 	const latLng = await getLatLng(results[0]);
-  // 	setAddress(value);
-  // 	setCoordinates(latLng);
-  // 	setLocation([latLng.lat, latLng.lng]);
-  // };
 
   useEffect(() => {
     getLocation();
   }, []);
-  // useEffect(() => {
-  // 	window.location.reload();
-  // },[location])
 
   return (
     <>
@@ -64,8 +51,9 @@ export const LandingPage = ({ setLogin }) => {
           <LogoutIcon />
         </Link>
       </div>
-      <Inputbox />
+      {/* <Inputbox /> */}
       {/* <PlacesAutocomplete
+
 				value={address}
 				onChange={setAddress}
 				onSelect={handleSelect}
@@ -107,9 +95,7 @@ export const LandingPage = ({ setLogin }) => {
 					</div>
 				)}
 			</PlacesAutocomplete> */}
-      <div style={{ height: "200px", width: "360px" }}>
-        {/* <MapContainer location={location} /> */}
-      </div>
+
       <p className='lead mt-5'>
         Type your destination point and find out all parking spots available for
         booking at the moment
@@ -130,6 +116,9 @@ export const LandingPage = ({ setLogin }) => {
           Search Now
         </button>
       </Link>
+      <div style={{ height: "170px", width: "360px" }}>
+        <MapContainer location={location} />
+      </div>
     </>
   );
 };
