@@ -8,23 +8,22 @@ import { useParams } from "react-router";
 import axios from "axios";
 
 export const Admin = () => {
-	const [selectedSpot, setSelectedSpot] = useState({});
-	// console.log("selectedSpot:", selectedSpot);
+  const [selectedSpot, setSelectedSpot] = useState({});
+  // console.log("selectedSpot:", selectedSpot);
 
-	const ModifySlots = async (type, value) => {
-		const postObj = {
-			id: selectedSpot._id,
-			[type]: selectedSpot[type] + value,
-		};
-		// console.log("postObj:", postObj);
-		const res = await axios.post(
-			"http://localhost:8000/admin/slot_update",
-			postObj
-		);
-		console.log("res:", res);
-		setSelectedSpot(res.data.data.updated);
-	};
-
+  const ModifySlots = async (type, value) => {
+    const postObj = {
+      id: selectedSpot._id,
+      [type]: selectedSpot[type] + value,
+    };
+    // console.log("postObj:", postObj);
+    const res = await axios.post(
+      "http://localhost:8000/admin/slot_update",
+      postObj
+    );
+    console.log("res:", res);
+    setSelectedSpot(res.data.data.updated);
+  };
 
   const getDetails = async () => {
     const res = await axios.get(
@@ -34,8 +33,6 @@ export const Admin = () => {
     setSelectedSpot(res.data.data.parking_data);
   };
 
-	
-
   let server_url = "http://localhost:8000/";
   let socket = io(server_url);
   console.log(selectedSpot._id);
@@ -44,24 +41,25 @@ export const Admin = () => {
     setSelectedSpot({ ...updated });
   });
   useEffect(() => {
-
-
     getDetails();
   }, []);
   return (
     <>
       <div className="d-flex justify-content-between mb-5">
-        <button className="btn">
+        <div className="d-flex">
           <MenuIcon />
-        </button>
+          <p className="ms-3">Welcome, Admin</p>
+        </div>
         <Link to="/">
-          <button className="btn">
-            <LogoutIcon />
-          </button>
+          <LogoutIcon />
         </Link>
       </div>
       <table>
         <tbody>
+          <tr>
+            <td>Parking Spot Name:</td>
+            <td>{selectedSpot.name}</td>
+          </tr>
           <tr>
             <td>Car spots available :</td>
             <td>

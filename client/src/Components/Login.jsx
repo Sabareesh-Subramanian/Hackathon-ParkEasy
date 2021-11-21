@@ -8,7 +8,8 @@ export const Login = ({ setLogin }) => {
         <img
           className="col-3 me-3"
           // src='https://i.pinimg.com/originals/4a/30/77/4a30772e96d7352a26414cd60de33655.gif'
-          src="https://cdn.dribbble.com/users/1287580/screenshots/5410442/dribbble_2.gif"
+          // src="https://cdn.dribbble.com/users/1287580/screenshots/5410442/dribbble_2.gif"
+          src="https://i.gifer.com/embedded/download/9S2J.gif"
           alt="Logo"
         />
         <p className="display-5">Park Easy</p>
