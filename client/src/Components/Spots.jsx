@@ -12,14 +12,17 @@ import axios from "axios";
 export const Spots = () => {
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const [spots, setSpots] = useState([]);
+  const details = JSON.parse(localStorage.getItem("GoogleDetails"));
+  const { lat, long } = JSON.parse(localStorage.getItem("startpoints"));
+  console.log("coordinates:", lat, long);
 
   useEffect(() => {
     getSpots();
   }, []);
   const getSpots = async () => {
     let res = await axios.post("http://localhost:8000/parking/find_places", {
-      lat: 13.0453221,
-      long: 80.2389704,
+      lat: lat,
+      long: long,
     });
 
     setSpots(res.data.data.parkings);
@@ -27,8 +30,8 @@ export const Spots = () => {
 
   const getDisabledSpots = async () => {
     let res = await axios.post("http://localhost:8000/parking/find_places", {
-      lat: 13.0453221,
-      long: 80.2389704,
+      lat: lat,
+      long: long,
       disabled_slot: true,
     });
 
@@ -42,7 +45,9 @@ export const Spots = () => {
       <div className='d-flex mt-2 justify-content-between'>
         <div className='d-flex'>
           <MenuIcon />
-          <p className='ms-3'>Welcome, {details.name}</p>
+
+          <p className="ms-3">Welcome, {details.givenName}</p>
+
         </div>
         <Link to='/'>
           <LogoutIcon />

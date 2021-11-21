@@ -85,15 +85,7 @@ export const SpotNew = () => {
           </table>
         </div>
         <div className="d-flex justify-content-evenly mt-5">
-          <button
-            // onClick={() => {
-            //   alert(
-            //     "Parking slot has been booked. Please pay the initial fare now."
-            //   );
-            // }}
-            onClick={handleOpen}
-            className="btn btn-outline-dark"
-          >
+          <button onClick={handleOpen} className="btn btn-outline-dark">
             Book Now
           </button>
 

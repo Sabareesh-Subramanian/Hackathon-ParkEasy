@@ -8,22 +8,23 @@ import { useParams } from "react-router";
 import axios from "axios";
 
 export const Admin = () => {
-  const [selectedSpot, setSelectedSpot] = useState({});
-  // console.log("selectedSpot:", selectedSpot);
+	const [selectedSpot, setSelectedSpot] = useState({});
+	// console.log("selectedSpot:", selectedSpot);
 
-  const ModifySlots = async (type, value) => {
-    const postObj = {
-      id: selectedSpot._id,
-      [type]: selectedSpot[type] + value,
-    };
-    // console.log("postObj:", postObj);
-    const res = await axios.post(
-      "http://localhost:8000/admin/slot_update",
-      postObj
-    );
-    console.log("res:", res);
-    setSelectedSpot(res.data.data.updated);
-  };
+	const ModifySlots = async (type, value) => {
+		const postObj = {
+			id: selectedSpot._id,
+			[type]: selectedSpot[type] + value,
+		};
+		// console.log("postObj:", postObj);
+		const res = await axios.post(
+			"http://localhost:8000/admin/slot_update",
+			postObj
+		);
+		console.log("res:", res);
+		setSelectedSpot(res.data.data.updated);
+	};
+
 
   const getDetails = async () => {
     const res = await axios.get(
@@ -32,18 +33,19 @@ export const Admin = () => {
     console.log("res:", res.data.data.parking_data);
     setSelectedSpot(res.data.data.parking_data);
   };
-  const socket = useRef();
 
-  const { id } = useParams();
+	
 
+  let server_url = "http://localhost:8000/";
+  let socket = io(server_url);
+  console.log(selectedSpot._id);
+  socket.on(selectedSpot._id, (updated) => {
+    console.log(updated);
+    setSelectedSpot({ ...updated });
+  });
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-    socket.current.emit("addUser", id);
-    socket.current.on("slotbooked", (data) => {
-      getDetails();
-      console.log(data);
-      // setSelectedSpot(data);
-    });
+
+
     getDetails();
   }, []);
   return (
@@ -58,82 +60,156 @@ export const Admin = () => {
           </button>
         </Link>
       </div>
+      <table>
+        <tbody>
+          <tr>
+            <td>Car spots available :</td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                disabled={selectedSpot.car_slots_available === 0}
+                onClick={() => {
+                  ModifySlots("car_slots_available", -1);
+                }}
+              >
+                -
+              </div>
+            </td>
+            <td>
+              <b>{selectedSpot.car_slots_available}</b>
+            </td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  ModifySlots("car_slots_available", 1);
+                }}
+              >
+                +
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Bike spots available :</td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                disabled={selectedSpot.bike_slots_available === 0}
+                onClick={() => {
+                  ModifySlots("bike_slots_available", -1);
+                }}
+              >
+                -
+              </div>
+            </td>
+            <td>
+              <b>{selectedSpot.bike_slots_available}</b>
+            </td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  ModifySlots("bike_slots_available", 1);
+                }}
+              >
+                +
+              </div>
+            </td>
+          </tr>
+          {selectedSpot.disabled_slot ? (
+            <tr>
+              <td>Disabled Parking spots available :</td>
+              <td>
+                <div
+                  className="mx-3"
+                  style={{ cursor: "pointer" }}
+                  disabled={selectedSpot.disabled_slot_available === 0}
+                  onClick={() => {
+                    ModifySlots("disabled_slot_available", -1);
+                  }}
+                >
+                  -
+                </div>
+              </td>
+              <td>
+                <b>{selectedSpot.disabled_slot_available || 0}</b>
+              </td>
+              <td>
+                <div
+                  className="mx-3"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    ModifySlots("disabled_slot_available", 1);
+                  }}
+                >
+                  +
+                </div>
+              </td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
       {/* <Navbar /> */}
-      <div className="d-flex">
-        <button
-          className="btn btn-outline-dark"
-          disabled={selectedSpot.car_slots_available === 0}
-          onClick={() => {
-            ModifySlots("car_slots_available", -1);
-          }}
-        >
-          -
-        </button>
-        <p>
-          Car spots available : <b>{selectedSpot.car_slots_available}</b>
-        </p>
-        <button
-          className="btn btn-outline-dark"
-          onClick={() => {
-            ModifySlots("car_slots_available", 1);
-          }}
-        >
-          +
-        </button>
-      </div>
-      <div className="d-flex">
-        <button
-          className="btn btn-outline-dark"
+
+      {/* <div className="d-flex">
+        <p>Bike spots available :</p>
+        <div
+          className="mx-3"
+          style={{ cursor: "pointer" }}
           disabled={selectedSpot.bike_slots_available === 0}
           onClick={() => {
             ModifySlots("bike_slots_available", -1);
           }}
         >
           -
-        </button>
-        <p>
-          Bike spots available : <b>{selectedSpot.bike_slots_available}</b>
-        </p>
-        <button
-          className="btn btn-outline-dark"
+        </div>
+
+        <b>{selectedSpot.bike_slots_available}</b>
+        <div
+          className="mx-3"
+          style={{ cursor: "pointer" }}
           onClick={() => {
             ModifySlots("bike_slots_available", 1);
           }}
         >
           +
-        </button>
-      </div>
-      {selectedSpot.disabled_slot ? (
-        <div className="d-flex">
-          <button
-            className="btn btn-outline-dark"
+        </div>
+      </div> */}
+      {/* {selectedSpot.disabled_slot ? (
+        <div className="d-flex justify-content-center">
+          <p>Disabled Parking spots available :</p>
+          <div
+            className="mx-3"
+            style={{ cursor: "pointer" }}
             disabled={selectedSpot.disabled_slot_available === 0}
             onClick={() => {
               ModifySlots("disabled_slot_available", -1);
             }}
           >
             -
-          </button>
+          </div>
 
-          <p>
-            Disabled Parking spots available :{" "}
-            <b>{selectedSpot.disabled_slot_available || 0}</b>
-          </p>
-          <button
-            className="btn btn-outline-dark"
+          <b>{selectedSpot.disabled_slot_available || 0}</b>
+          <div
+            className="mx-3"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               ModifySlots("disabled_slot_available", 1);
             }}
           >
             +
-          </button>
+          </div>
         </div>
-      ) : null}
+      ) : null} */}
 
-      <button className="btn btn-outline-dark mt-5">Add a free spot</button>
+      {/* <button className="btn btn-outline-dark mt-5">Add a free spot</button>
       <button className="btn btn-outline-dark mt-5">
         Remove a booked spot
-      </button>
+      </button> */}
     </>
   );
 };
