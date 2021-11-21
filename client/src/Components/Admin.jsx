@@ -8,33 +8,34 @@ import { useParams } from "react-router";
 import axios from "axios";
 
 export const Admin = () => {
-  const [selectedSpot, setSelectedSpot] = useState({});
-  // console.log("selectedSpot:", selectedSpot);
+	const [selectedSpot, setSelectedSpot] = useState({});
+	// console.log("selectedSpot:", selectedSpot);
 
-  const ModifySlots = async (type, value) => {
-    const postObj = {
-      id: selectedSpot._id,
-      [type]: selectedSpot[type] + value,
-    };
-    // console.log("postObj:", postObj);
-    const res = await axios.post(
-      "http://localhost:8000/admin/slot_update",
-      postObj
-    );
-    console.log("res:", res);
-    setSelectedSpot(res.data.data.updated);
-  };
+	const ModifySlots = async (type, value) => {
+		const postObj = {
+			id: selectedSpot._id,
+			[type]: selectedSpot[type] + value,
+		};
+		// console.log("postObj:", postObj);
+		const res = await axios.post(
+			"http://localhost:8000/admin/slot_update",
+			postObj
+		);
+		console.log("res:", res);
+		setSelectedSpot(res.data.data.updated);
+	};
 
-  const getDetails = async () => {
-    const res = await axios.get(
-      "http://localhost:8000/admin/parking_data/6198825165cf28bb8d471de6"
-    );
-    console.log("res:", res.data.data.parking_data);
-    setSelectedSpot(res.data.data.parking_data);
-  };
-  const socket = useRef();
+	const getDetails = async () => {
+		const res = await axios.get(
+			"http://localhost:8000/admin/parking_data/6198825165cf28bb8d471de6"
+		);
+		console.log("res:", res.data.data.parking_data);
+		setSelectedSpot(res.data.data.parking_data);
+	};
+	const socket = useRef();
 
-  const { id } = useParams();
+	const { id } = useParams();
+
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
