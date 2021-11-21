@@ -46,7 +46,7 @@ router.post("/find_places", async (req, res) => {
 });
 
 router.post("/book", async (req, res) => {
-  let { body } = req;
+  let { vehicleNumber, ...body } = req.body;
   let { parking_id, slot } = body;
 
   try {
@@ -79,7 +79,7 @@ router.post("/book", async (req, res) => {
       .exec();
 
     let socket = req.app.get("socket");
-    socket.emit(parking_id, updated);
+    socket.emit(parking_id, { updated, vehicleNumber });
 
     return res.status(200).json({
       error: false,
