@@ -37,6 +37,7 @@ export const IndividualSpot = () => {
   const handleClose = () => setOpen(false);
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const handleBooking = async () => {
+
     try {
       let res = await axios.post(" http://localhost:8000/parking/book", {
         parking_id: selectedSpot._id,
@@ -51,6 +52,7 @@ export const IndividualSpot = () => {
         setError(true);
       }
     }
+
   };
   const [selectedSpot, setSelectedSpot] = useState({});
   const { id } = useParams();

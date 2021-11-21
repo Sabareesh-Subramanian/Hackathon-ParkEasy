@@ -25,26 +25,27 @@ export const Admin = () => {
 		setSelectedSpot(res.data.data.updated);
 	};
 
-	const getDetails = async () => {
-		const res = await axios.get(
-			"http://localhost:8000/admin/parking_data/6198825165cf28bb8d471de6"
-		);
-		console.log("res:", res.data.data.parking_data);
-		setSelectedSpot(res.data.data.parking_data);
-	};
-	const socket = useRef();
 
-	const { id } = useParams();
+  const getDetails = async () => {
+    const res = await axios.get(
+      "http://localhost:8000/admin/parking_data/6198825165cf28bb8d471de6"
+    );
+    console.log("res:", res.data.data.parking_data);
+    setSelectedSpot(res.data.data.parking_data);
+  };
 
+	
 
+  let server_url = "http://localhost:8000/";
+  let socket = io(server_url);
+  console.log(selectedSpot._id);
+  socket.on(selectedSpot._id, (updated) => {
+    console.log(updated);
+    setSelectedSpot({ ...updated });
+  });
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-    socket.current.emit("addUser", id);
-    socket.current.on("slotbooked", (data) => {
-      getDetails();
-      console.log(data);
-      //   // setSelectedSpot(data);
-    });
+
+
     getDetails();
   }, []);
   return (
