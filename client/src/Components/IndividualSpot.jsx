@@ -4,7 +4,7 @@ import motorcycle from "../icons/motorcycle.svg";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
-
+import TextField from "@mui/material/TextField";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -31,12 +31,15 @@ export const IndividualSpot = () => {
   const [open, setOpen] = useState(false);
   const [payment, setPayment] = useState(false);
   const [error, setError] = useState(false);
+
+
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   const [booking_details, setBookingDetails] = useState(["car", details.name]);
   const [input, setInput] = useState("");
 
   const [selectedSpot, setSelectedSpot] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
+  const [vehicleNumber, setVehicleNumber] = useState(null);
   const { id } = useParams();
 
   const getDetails = async () => {
@@ -52,6 +55,7 @@ export const IndividualSpot = () => {
         slot: slot,
         mobile: 8098806664,
         user: name,
+        vehicleNumber: vehicleNumber,
       });
       handleClose();
       getDetails();
@@ -102,36 +106,38 @@ export const IndividualSpot = () => {
     "Loading ..."
   ) : (
     <>
+
       <div className='border border-0 p-2 textAlignLeft'>
         <div className='d-flex mt-2 justify-content-between'>
           <div className='d-flex'>
+
             <MenuIcon />
-            <p className='ms-3'>Welcome, {details.givenName}</p>
+            <p className="ms-3">Welcome, {details.givenName}</p>
           </div>
-          <Link to='/'>
+          <Link to="/">
             <LogoutIcon />
           </Link>
         </div>
         <p>Details of the Selected Location</p>
-        <div className='flex jsc-sa'>
+        <div className="flex jsc-sa">
           <div>
             <div style={{ fontSize: 22 }}>
               <b>{selectedSpot.name}</b>
             </div>
 
             <div>
-              <span className='fa fa-star checked'></span>
-              <span className='fa fa-star checked'></span>
-              <span className='fa fa-star checked'></span>
-              <span className='fa fa-star'></span>
-              <span className='fa fa-star'></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star"></span>
+              <span className="fa fa-star"></span>
             </div>
           </div>
 
-          <div className='svgfeatures'>
-            <img sty height='50' alt='' src={motorcycle} />
+          <div className="svgfeatures">
+            <img sty height="50" alt="" src={motorcycle} />
             {selectedSpot.disabled_slot ? (
-              <img height='40' alt='' src={disabled} />
+              <img height="40" alt="" src={disabled} />
             ) : null}
           </div>
         </div>
@@ -149,14 +155,14 @@ export const IndividualSpot = () => {
         <div>
           <Button
             style={{ backgroundColor: "#00b386", color: "white" }}
-            aria-controls='simple-menu'
-            aria-haspopup='true'
+            aria-controls="simple-menu"
+            aria-haspopup="true"
             onClick={handleClick}
           >
             Book now
           </Button>
           <Menu
-            id='simple-menu'
+            id="simple-menu"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
@@ -180,17 +186,18 @@ export const IndividualSpot = () => {
         <Modal
           open={open}
           onClose={handleCloseModal}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Typography id='modal-modal-title' variant='h6' component='h2'>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
               {error
                 ? "Uh Oh! There's a failure!"
                 : payment
                 ? "Booking Success!"
                 : "Confirm Payment"}
             </Typography>
+
             {/* {error ? null : payment ? null : (
               <input
                 type='text'
@@ -201,15 +208,28 @@ export const IndividualSpot = () => {
               />
             )} */}
             <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+
               {error
                 ? "Looks like others have over passed you. Please try a different parking spot."
                 : payment
                 ? "Woohoo! You've successfully booked yourself a parking spot. Enjoy your shopping now! :)"
                 : "Please pay the price for the first one hour and book yourself a parking spot."}
             </Typography>
+            {!error && !payment ? (
+              <TextField
+                className="mt-3"
+                id="outlined-basic"
+                label="Vehicle Number"
+                variant="standard"
+                onChange={(e) => {
+                  setVehicleNumber(e.target.value);
+                }}
+              />
+            ) : null}
+            <br />
             {error ? (
-              <Link to='/spots'>
-                <button className='btn btn-outline-dark mt-3'>
+              <Link to="/spots">
+                <button className="btn btn-outline-dark mt-3">
                   Search for a different spot
                 </button>{" "}
               </Link>
@@ -221,7 +241,7 @@ export const IndividualSpot = () => {
                     selectedSpot.loc.coordinates[1]
                   )
                 }
-                className='btn btn-outline-dark mt-3'
+                className="btn btn-outline-dark mt-3"
               >
                 Navigate to Spot
               </button>
@@ -231,7 +251,7 @@ export const IndividualSpot = () => {
                   setPayment(true);
                   handleBooking();
                 }}
-                className='btn btn-outline-dark mt-3'
+                className="btn btn-outline-dark mt-3"
               >
                 Pay Now
               </button>

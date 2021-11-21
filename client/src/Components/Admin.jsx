@@ -22,6 +22,7 @@ const style = {
 };
 
 export const Admin = () => {
+
   const [modal, setModal] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState({});
 
@@ -38,6 +39,7 @@ export const Admin = () => {
       "http://localhost:8000/admin/slot_update",
       postObj
     );
+
 
     setSelectedSpot(res.data.data.updated);
   };
@@ -64,14 +66,17 @@ export const Admin = () => {
 
   return (
     <>
+
       <div className='d-flex justify-content-between mb-5'>
-        <button className='btn'>
+        <div className="d-flex">
           <MenuIcon />
-        </button>
+          <p className="ms-3">Welcome, Admin</p>
+        </div>
         <Link to='/'>
           <button className='btn'>
             <LogoutIcon />
           </button>
+
         </Link>
       </div>
       <table>
