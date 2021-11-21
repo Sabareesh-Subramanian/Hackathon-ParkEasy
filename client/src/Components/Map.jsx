@@ -7,7 +7,6 @@ const mapStyles = {
 };
 
 export class MapContainer extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -17,7 +16,19 @@ export class MapContainer extends Component {
 			],
 		};
 	}
-
+	diplaycurrentLoc = (lat, long) => {
+		return (
+			<Marker
+				key={0}
+				id={0}
+				position={{
+					lat: lat,
+					lng: long,
+				}}
+				onClick={() => console.log("You clicked me!")}
+			/>
+		);
+	};
 	displayMarkers = () => {
 		return this.state.stores.map((store, index) => {
 			return (
@@ -79,11 +90,14 @@ export class MapContainer extends Component {
 					}}
 				>
 					{this.displayMarkers()}
+					{this.diplaycurrentLoc(
+						this.props.location[0],
+						this.props.location[1]
+					)}
 				</Map>
 			</>
 		);
 	}
-
 }
 
 export default GoogleApiWrapper({
