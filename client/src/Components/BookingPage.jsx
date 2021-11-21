@@ -1,10 +1,13 @@
 import axios from "axios";
 import { io } from "socket.io-client";
 import { useEffect, useRef } from "react";
+import { useParams } from "react-router";
 
 export const BookingPage = () => {
 	const socket = useRef();
 
+	const user = localStorage.getItem("GoogleDetails");
+	const { id } = useParams();
 	useEffect(() => {
 		socket.current = io("ws://localhost:8900");
 		socket.current.on("successBooked", (data) => {
@@ -13,15 +16,15 @@ export const BookingPage = () => {
 	}, []);
 
 	const handleSubmit = (e) => {
-		const parking_id = "6198825165cf28bb8d471ddb";
+		const parking_id = id;
 		const type = "car";
-		const bookerId = "1234";
-		const mobile = 1234;
+		const bookerId = user && user.name;
+		const mobile = Math.random("7000000000", "9000000000");
 
 		try {
 			axios
 				.post("http://localhost:8000/parking/book", {
-					parking_id: "6198825165cf28bb8d471ddb",
+					parking_id: parking_id,
 					slot: "car",
 					mobile,
 					user: "abc",
