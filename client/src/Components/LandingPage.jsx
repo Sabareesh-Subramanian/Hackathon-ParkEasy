@@ -6,6 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import Inputbox from "./Inputbox";
+import { listItemIconClasses } from "@mui/material";
 
 // import PlacesAutocomplete, {
 // 	geocodeByAddress,
@@ -13,6 +14,7 @@ import Inputbox from "./Inputbox";
 // } from "react-places-autocomplete";
 
 export const LandingPage = ({ setLogin }) => {
+
 	const [location, setLocation] = useState([]);
 	// const [address, setAddress] = useState("");
 	// const [coordinates, setCoordinates] = useState({
@@ -50,12 +52,14 @@ export const LandingPage = ({ setLogin }) => {
 	// 	setLocation([latLng.lat, latLng.lng]);
 	// };
 
+
 	useEffect(() => {
 		getLocation();
 	}, []);
 	// useEffect(() => {
 	// 	window.location.reload();
 	// },[location])
+
 
 	return (
 		<>
@@ -70,6 +74,7 @@ export const LandingPage = ({ setLogin }) => {
 			</div>
 			{/* <Inputbox /> */}
 			{/* <PlacesAutocomplete
+
 				value={address}
 				onChange={setAddress}
 				onSelect={handleSelect}
@@ -112,6 +117,7 @@ export const LandingPage = ({ setLogin }) => {
 				)}
 			</PlacesAutocomplete> */}
 
+
 			<p className="lead mt-5">
 				Type your destination point and find out all parking spots
 				available for booking at the moment
@@ -137,4 +143,5 @@ export const LandingPage = ({ setLogin }) => {
 			</div>
 		</>
 	);
+
 };

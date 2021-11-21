@@ -17,7 +17,7 @@ router.post("/find_places", async (req, res) => {
             type: "Point",
             coordinates: [Number(lat), Number(long)],
           },
-          $maxDistance: distance === undefined ? 1500 : distance,
+          $maxDistance: distance === undefined ? 5000 : distance,
         },
       },
       $or: [
