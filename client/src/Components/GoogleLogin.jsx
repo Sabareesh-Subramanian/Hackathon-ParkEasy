@@ -27,7 +27,7 @@ export function GLogin() {
     <div>
       <GoogleLogin
         clientId={clientId}
-        buttonText="Signin with Google"
+        buttonText="Sign in with Google"
         onSuccess={onSuccess}
         onFailure={onFailure}
         cookiePolicy={"single_host_origin"}
