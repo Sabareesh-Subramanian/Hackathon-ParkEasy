@@ -14,7 +14,7 @@ export function GLogin() {
 
   const onSuccess = (res) => {
     localStorage.setItem("GoogleDetails", JSON.stringify(res.profileObj));
-    // navigateHome();
+    navigateHome();
   };
 
   const onFailure = (res) => {
@@ -27,12 +27,12 @@ export function GLogin() {
     <div>
       <GoogleLogin
         clientId={clientId}
-        buttonText='Signin with Google'
+        buttonText="Signin with Google"
         onSuccess={onSuccess}
         onFailure={onFailure}
         cookiePolicy={"single_host_origin"}
         style={{ boxShadow: "3px 5px 10px #e6e6e6" }}
-        isSignedIn={true}
+        // isSignedIn={true}
       />
     </div>
   );

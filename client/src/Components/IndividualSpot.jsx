@@ -10,9 +10,9 @@ import { useParams } from "react-router";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
+// import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { BookingPage } from "./BookingPage";
@@ -31,13 +31,16 @@ const style = {
   p: 4,
 };
 
-
 export const IndividualSpot = () => {
   const [open, setOpen] = useState(false);
   const [payment, setPayment] = useState(false);
   const [error, setError] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleCloseModal = () => {
+    setOpen(false);
+    setError(false);
+    setPayment(false);
+  };
   const details = JSON.parse(localStorage.getItem("GoogleDetails"));
 
   const [selectedSpot, setSelectedSpot] = useState({});
@@ -50,6 +53,7 @@ export const IndividualSpot = () => {
   };
 
   const handleBooking = async (slot, name) => {
+    handleOpen();
     try {
       let res = await axios.post(" http://localhost:8000/parking/book", {
         parking_id: selectedSpot._id,
@@ -80,6 +84,7 @@ export const IndividualSpot = () => {
   }, []);
 
   function myNavFunc(lat, log) {
+    handleCloseModal();
     if (
       navigator.platform.indexOf("iPhone") != -1 ||
       navigator.platform.indexOf("iPod") != -1 ||
@@ -98,7 +103,6 @@ export const IndividualSpot = () => {
     "Loading ..."
   ) : (
     <>
-
       <div className="border border-0 p-2 textAlignLeft">
         {/* <div>
            <p>Home</p>
@@ -113,21 +117,20 @@ export const IndividualSpot = () => {
           <Link to="/">
             <LogoutIcon />
           </Link>
-
         </div>
         <p>Details of the Selected Location</p>
-        <div className='flex jsc-sa'>
+        <div className="flex jsc-sa">
           <div>
             <div style={{ fontSize: 22 }}>
               <b>{selectedSpot.name}</b>
             </div>
 
             <div>
-              <span className='fa fa-star checked'></span>
-              <span className='fa fa-star checked'></span>
-              <span className='fa fa-star checked'></span>
-              <span className='fa fa-star'></span>
-              <span className='fa fa-star'></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star checked"></span>
+              <span className="fa fa-star"></span>
+              <span className="fa fa-star"></span>
             </div>
           </div>
 
@@ -136,7 +139,6 @@ export const IndividualSpot = () => {
             {selectedSpot.disabled_slot ? (
               <img height="40" alt="" src={disabled} />
             ) : null}
-
           </div>
         </div>
 
@@ -205,44 +207,42 @@ export const IndividualSpot = () => {
             </Menu>
           </div>
         </div> */}
-      <div>
-            <Button
-              style={{ backgroundColor: "#00b386", color: "white" }}
-              aria-controls='simple-menu'
-              aria-haspopup='true'
-              onClick={handleClick}
-            >
-              Book now
-            </Button>
-            <Menu
-              id='simple-menu'
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={() => handleBooking("car", details.name)}>
-                Book for car
+        <div>
+          <Button
+            style={{ backgroundColor: "#00b386", color: "white" }}
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            Book now
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => handleBooking("car", details.name)}>
+              Book for car
+            </MenuItem>
+            <MenuItem onClick={() => handleBooking("bike", details.name)}>
+              Book for bike
+            </MenuItem>
+            {selectedSpot.disabled_slot ? (
+              <MenuItem onClick={() => handleBooking("disabled", details.name)}>
+                Book disaabled friendly
               </MenuItem>
-              <MenuItem onClick={() => handleBooking("bike", details.name)}>
-                Book for bike
-              </MenuItem>
-              {selectedSpot.disabled_slot ? (
-                <MenuItem
-                  onClick={() => handleBooking("disabled", details.name)}
-                >
-                  Book disaabled friendly
-                </MenuItem>
-              ) : null}
-            </Menu>
-          </div>
+            ) : null}
+          </Menu>
         </div>
-        <div className="d-flex justify-content-center my-3">
-          <button onClick={handleOpen} className="btn btn-outline-dark">
-            Book Now
-          </button>
-        </div>
-        {/* <div
+      </div>
+      {/* <div className="d-flex justify-content-center my-3">
+        <button onClick={handleOpen} className="btn btn-outline-dark">
+          Book Now
+        </button>
+      </div> */}
+      {/* <div
           style={{
             maxWidth: "350px",
             maxHeight: "200px",
@@ -252,14 +252,13 @@ export const IndividualSpot = () => {
 
         </div> */}
 
-        </div>
-        {/* <div id="map"></div> */}
-      </div>
+      {/* <div id="map"></div> */}
+
       {/* Success Modal  */}
       <div>
         <Modal
           open={open}
-          onClose={handleClose}
+          onClose={handleCloseModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -300,7 +299,7 @@ export const IndividualSpot = () => {
               <button
                 onClick={() => {
                   setPayment(true);
-                  handleBooking();
+                  // handleBooking();
                 }}
                 className="btn btn-outline-dark mt-3"
               >
@@ -309,7 +308,6 @@ export const IndividualSpot = () => {
             )}
           </Box>
         </Modal>
-
       </div>
     </>
   );
