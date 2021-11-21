@@ -5,7 +5,9 @@ const mapStyles = {
 	width: "360px",
 	height: "400px",
 };
+
 export class MapContainer extends Component {
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -81,6 +83,7 @@ export class MapContainer extends Component {
 			</>
 		);
 	}
+
 }
 
 export default GoogleApiWrapper({

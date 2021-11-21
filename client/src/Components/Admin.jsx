@@ -36,107 +36,179 @@ export const Admin = () => {
 
 	const { id } = useParams();
 
-	useEffect(() => {
-		socket.current = io("ws://localhost:8900");
-		socket.current.emit("addUser", id);
-		socket.current.on("slotbooked", (data) => {
-			getDetails();
-			// setSelectedSpot(data);
-		});
-		getDetails();
-	}, []);
-	return (
-		<>
-			<div className="d-flex justify-content-between mb-5">
-				<button className="btn">
-					<MenuIcon />
-				</button>
-				<Link to="/">
-					<button className="btn">
-						<LogoutIcon />
-					</button>
-				</Link>
-			</div>
-			{/* <Navbar /> */}
-			<div className="d-flex">
-				<button
-					className="btn btn-outline-dark"
-					disabled={selectedSpot.car_slots_available === 0}
-					onClick={() => {
-						ModifySlots("car_slots_available", -1);
-					}}
-				>
-					-
-				</button>
-				<p>
-					Car spots available :{" "}
-					<b>{selectedSpot.car_slots_available}</b>
-				</p>
-				<button
-					className="btn btn-outline-dark"
-					onClick={() => {
-						ModifySlots("car_slots_available", 1);
-					}}
-				>
-					+
-				</button>
-			</div>
-			<div className="d-flex">
-				<button
-					className="btn btn-outline-dark"
-					disabled={selectedSpot.bike_slots_available === 0}
-					onClick={() => {
-						ModifySlots("bike_slots_available", -1);
-					}}
-				>
-					-
-				</button>
-				<p>
-					Bike spots available :{" "}
-					<b>{selectedSpot.bike_slots_available}</b>
-				</p>
-				<button
-					className="btn btn-outline-dark"
-					onClick={() => {
-						ModifySlots("bike_slots_available", 1);
-					}}
-				>
-					+
-				</button>
-			</div>
-			{selectedSpot.disabled_slot ? (
-				<div className="d-flex">
-					<button
-						className="btn btn-outline-dark"
-						disabled={selectedSpot.disabled_slot_available === 0}
-						onClick={() => {
-							ModifySlots("disabled_slot_available", -1);
-						}}
-					>
-						-
-					</button>
 
-					<p>
-						Disabled Parking spots available :{" "}
-						<b>{selectedSpot.disabled_slot_available || 0}</b>
-					</p>
-					<button
-						className="btn btn-outline-dark"
-						onClick={() => {
-							ModifySlots("disabled_slot_available", 1);
-						}}
-					>
-						+
-					</button>
-				</div>
-			) : null}
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.emit("addUser", id);
+    socket.current.on("slotbooked", (data) => {
+      getDetails();
+      console.log(data);
+      //   // setSelectedSpot(data);
+    });
+    getDetails();
+  }, []);
+  return (
+    <>
+      <div className="d-flex justify-content-between mb-5">
+        <button className="btn">
+          <MenuIcon />
+        </button>
+        <Link to="/">
+          <button className="btn">
+            <LogoutIcon />
+          </button>
+        </Link>
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td>Car spots available :</td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                disabled={selectedSpot.car_slots_available === 0}
+                onClick={() => {
+                  ModifySlots("car_slots_available", -1);
+                }}
+              >
+                -
+              </div>
+            </td>
+            <td>
+              <b>{selectedSpot.car_slots_available}</b>
+            </td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  ModifySlots("car_slots_available", 1);
+                }}
+              >
+                +
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Bike spots available :</td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                disabled={selectedSpot.bike_slots_available === 0}
+                onClick={() => {
+                  ModifySlots("bike_slots_available", -1);
+                }}
+              >
+                -
+              </div>
+            </td>
+            <td>
+              <b>{selectedSpot.bike_slots_available}</b>
+            </td>
+            <td>
+              <div
+                className="mx-3"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  ModifySlots("bike_slots_available", 1);
+                }}
+              >
+                +
+              </div>
+            </td>
+          </tr>
+          {selectedSpot.disabled_slot ? (
+            <tr>
+              <td>Disabled Parking spots available :</td>
+              <td>
+                <div
+                  className="mx-3"
+                  style={{ cursor: "pointer" }}
+                  disabled={selectedSpot.disabled_slot_available === 0}
+                  onClick={() => {
+                    ModifySlots("disabled_slot_available", -1);
+                  }}
+                >
+                  -
+                </div>
+              </td>
+              <td>
+                <b>{selectedSpot.disabled_slot_available || 0}</b>
+              </td>
+              <td>
+                <div
+                  className="mx-3"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    ModifySlots("disabled_slot_available", 1);
+                  }}
+                >
+                  +
+                </div>
+              </td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
+      {/* <Navbar /> */}
 
-			<button className="btn btn-outline-dark mt-5">
-				Add a free spot
-			</button>
-			<button className="btn btn-outline-dark mt-5">
-				Remove a booked spot
-			</button>
-		</>
-	);
+      {/* <div className="d-flex">
+        <p>Bike spots available :</p>
+        <div
+          className="mx-3"
+          style={{ cursor: "pointer" }}
+          disabled={selectedSpot.bike_slots_available === 0}
+          onClick={() => {
+            ModifySlots("bike_slots_available", -1);
+          }}
+        >
+          -
+        </div>
+
+        <b>{selectedSpot.bike_slots_available}</b>
+        <div
+          className="mx-3"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            ModifySlots("bike_slots_available", 1);
+          }}
+        >
+          +
+        </div>
+      </div> */}
+      {/* {selectedSpot.disabled_slot ? (
+        <div className="d-flex justify-content-center">
+          <p>Disabled Parking spots available :</p>
+          <div
+            className="mx-3"
+            style={{ cursor: "pointer" }}
+            disabled={selectedSpot.disabled_slot_available === 0}
+            onClick={() => {
+              ModifySlots("disabled_slot_available", -1);
+            }}
+          >
+            -
+          </div>
+
+          <b>{selectedSpot.disabled_slot_available || 0}</b>
+          <div
+            className="mx-3"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              ModifySlots("disabled_slot_available", 1);
+            }}
+          >
+            +
+          </div>
+        </div>
+      ) : null} */}
+
+      {/* <button className="btn btn-outline-dark mt-5">Add a free spot</button>
+      <button className="btn btn-outline-dark mt-5">
+        Remove a booked spot
+      </button> */}
+    </>
+  );
 };

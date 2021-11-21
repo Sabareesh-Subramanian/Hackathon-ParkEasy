@@ -13,6 +13,8 @@ import Inputbox from "./Inputbox";
 // } from "react-places-autocomplete";
 
 export const LandingPage = ({ setLogin }) => {
+
+  
 	const [location, setLocation] = useState([]);
 	// const [address, setAddress] = useState("");
 	// const [coordinates, setCoordinates] = useState({
@@ -80,12 +82,15 @@ export const LandingPage = ({ setLogin }) => {
 						<div>
 							{loading ? <div>...loading</div> : null}
 
+
 							{suggestions.map((suggestion) => {
 								const style = {
 									backgroundColor: suggestion.active
 										? "#41b6e6"
 										: "#fff",
 								};
+
+
 
 								return (
 									<div
@@ -126,4 +131,5 @@ export const LandingPage = ({ setLogin }) => {
 			</Link>
 		</>
 	);
+
 };
