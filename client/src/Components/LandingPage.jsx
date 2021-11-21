@@ -6,6 +6,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 export const LandingPage = ({ setLogin }) => {
   const [location, setLocation] = useState("");
+  const details = JSON.parse(localStorage.getItem("GoogleDetails"));
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
@@ -16,6 +17,13 @@ export const LandingPage = ({ setLogin }) => {
 
   function showPosition(position) {
     setLocation(position.coords.latitude + "," + position.coords.longitude);
+    localStorage.setItem(
+      "startpoints",
+      JSON.stringify({
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+      })
+    );
   }
 
   useEffect(() => {
@@ -27,18 +35,18 @@ export const LandingPage = ({ setLogin }) => {
       <div className="d-flex m-2 justify-content-between">
         <div className="d-flex">
           <MenuIcon />
-          <p className="ms-3">Welcome, Sabareesh</p>
+          <p className="ms-3">Welcome, {details.givenName}</p>
         </div>
         <Link to="/">
           <LogoutIcon />
         </Link>
       </div>
-      {/* <div style={{ height: "200px", width: "360px" }}>
+      <div style={{ height: "200px", width: "360px" }}>
         <Map
         //   lat={location.trim().split(",")[0]}
         //   long={location.trim().split(",")[0]}
         />
-      </div> */}
+      </div>
       {/* <br /> */}
       <p className="lead mt-5">
         Type your destination point and find out all parking spots available for

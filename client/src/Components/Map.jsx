@@ -5,11 +5,13 @@ const mapStyles = {
   width: "360px",
   height: "200px",
 };
+
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      coordinates: JSON.parse(localStorage.getItem("startpoints")),
       stores: [
         { latitude: 28.83943, longitude: 78.760064 },
         { latitude: 28.838099, longitude: 78.760773 },
@@ -39,7 +41,10 @@ export class MapContainer extends Component {
         google={this.props.google}
         zoom={15}
         style={mapStyles}
-        initialCenter={{ lat: 28.83943, lng: 78.760064 }}
+        initialCenter={{
+          lat: this.state.coordinates.lat,
+          lng: this.state.coordinates.lat,
+        }}
       >
         {this.displayMarkers()}
       </Map>
