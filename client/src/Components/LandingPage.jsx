@@ -24,39 +24,39 @@ export const LandingPage = ({ setLogin }) => {
 
   return (
     <>
-      <div className="d-flex m-2 justify-content-between">
-        <div className="d-flex">
+      <div className='d-flex m-2 justify-content-between'>
+        <div className='d-flex'>
           <MenuIcon />
-          <p className="ms-3">Welcome, Sabareesh</p>
+          <p className='ms-3'>Welcome, Sabareesh</p>
         </div>
-        <Link to="/">
+        <Link to='/'>
           <LogoutIcon />
         </Link>
       </div>
-      {/* <div style={{ height: "200px", width: "360px" }}>
+      <div style={{ height: "200px", width: "360px" }}>
         <Map
-        //   lat={location.trim().split(",")[0]}
-        //   long={location.trim().split(",")[0]}
+        // lat={location.trim().split(",")[0]}
+        // long={location.trim().split(",")[0]}
         />
-      </div> */}
-      {/* <br /> */}
-      <p className="lead mt-5">
+      </div>
+      <br />
+      <p className='lead mt-5'>
         Type your destination point and find out all parking spots available for
         booking at the moment
       </p>
       <div>
         <input
-          type="text"
+          type='text'
           value={location}
           onChange={(e) => {
             setLocation(e.target.value);
           }}
-          className="form-control mt-5 text-center"
-          placeholder="Enter your destination"
+          className='form-control mt-5 text-center'
+          placeholder='Enter your destination'
         />
       </div>
-      <Link to="/spots">
-        <button className="btn btn-outline-secondary mt-5 mb-5">
+      <Link to='/spots'>
+        <button className='btn btn-outline-secondary mt-5 mb-5'>
           Search Now
         </button>
       </Link>

@@ -1,21 +1,23 @@
 import React from "react";
-
 import { GoogleLogin } from "react-google-login";
+import { useNavigate } from "react-router-dom";
 
 const clientId =
   "707788443358-u05p46nssla3l8tmn58tpo9r5sommgks.apps.googleusercontent.com";
 
 export function GLogin() {
+  const navigate = useNavigate();
+
+  const navigateHome = () => {
+    navigate("/home");
+  };
+
   const onSuccess = (res) => {
-    console.log("Login Success: currentUser:", res.profileObj);
-    // alert(
-    //   `Logged in successfully welcome ${res.profileObj.name} 😍. \n See console for full profile object.`
-    // );
     localStorage.setItem("GoogleDetails", JSON.stringify(res.profileObj));
+    // navigateHome();
   };
 
   const onFailure = (res) => {
-    console.log("Login failed: res:", res);
     alert(
       `Failed to login. 😢 Please ping this to repo owner twitter.com/sivanesh_fiz`
     );
@@ -25,11 +27,11 @@ export function GLogin() {
     <div>
       <GoogleLogin
         clientId={clientId}
-        buttonText="Login"
+        buttonText='Signin with Google'
         onSuccess={onSuccess}
         onFailure={onFailure}
         cookiePolicy={"single_host_origin"}
-        style={{ marginTop: "100px" }}
+        style={{ boxShadow: "3px 5px 10px #e6e6e6" }}
         isSignedIn={true}
       />
     </div>
